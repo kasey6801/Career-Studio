@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Career Positioning Studio</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>Career Positioning Studio</h1>
+  <p class="tagline">Paste a LinkedIn profile and (optionally) a personal site, GitHub, or existing CV. Get a LinkedIn update plan, a tailored CV, a 6–12 month professional development plan, and 10 open-position targets.</p>
+</header>
+
+<main>
+
+  <!-- ======================================================= -->
+  <!-- 1. Inputs                                                -->
+  <!-- ======================================================= -->
+  <section class="panel" id="inputs-panel">
+    <h2 class="panel-title">1. Inputs</h2>
+
+    <!-- LinkedIn block -->
+    <div class="field-group">
+      <label class="field-label" for="linkedin-url">
+        LinkedIn profile <span class="required">*required</span>
+      </label>
+      <p class="field-hint">Three ways to provide it: paste text, upload a file (.pdf, .txt, .md, .html, .rtf), or enter the URL below for reference.</p>
+
+      <input type="url" id="linkedin-url" class="url-input"
+             placeholder="https://www.linkedin.com/in/username"
+             autocomplete="off">
+
+      <div class="upload-row">
+        <label class="file-btn">
+          <input type="file" id="linkedin-file"
+                 accept=".pdf,.txt,.md,.markdown,.html,.htm,.rtf,.json,.csv,.log" hidden>
+          Choose File
+        </label>
+        <span id="linkedin-file-name" class="file-name">No file chosen</span>
+        <span id="linkedin-file-pill" class="pill" style="display:none"></span>
+      </div>
+
+      <textarea id="linkedin" rows="10"
+                placeholder="…or paste profile content here (auto-filled from upload)"></textarea>
+    </div>
+
+    <!-- Website + GitHub -->
+    <div class="two-col">
+      <div class="field-group">
+        <label class="field-label" for="website">
+          Personal website / portfolio URL <span class="optional">optional</span>
+        </label>
+        <input type="url" id="website" placeholder="https://example.com" autocomplete="off">
+      </div>
+      <div class="field-group">
+        <label class="field-label" for="github">
+          GitHub URL <span class="optional">optional</span>
+        </label>
+        <input type="url" id="github" placeholder="https://github.com/username" autocomplete="off">
+      </div>
+    </div>
+
+    <!-- CV block -->
+    <div class="field-group">
+      <label class="field-label">
+        Existing CV / resume content <span class="optional">optional</span> — upload or paste
+      </label>
+      <div class="upload-row">
+        <label class="file-btn">
+          <input type="file" id="cv-file"
+                 accept=".pdf,.txt,.md,.markdown,.html,.htm,.rtf,.json,.csv,.log" hidden>
+          Choose File
+        </label>
+        <span id="cv-file-name" class="file-name">No file chosen</span>
+        <span id="cv-file-pill" class="pill" style="display:none"></span>
+      </div>
+      <textarea id="cv" rows="6"
+                placeholder="…or paste existing resume content here (auto-filled from upload)"></textarea>
+    </div>
+
+    <!-- Career goals -->
+    <div class="field-group">
+      <label class="field-label" for="q1">
+        Target job titles <span class="optional">optional but recommended</span>
+      </label>
+      <input type="text" id="q1"
+             placeholder="e.g. Solutions Architect, Cloud Engineer, Security Analyst">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="q2">
+        Target industries <span class="optional">optional but recommended</span>
+      </label>
+      <input type="text" id="q2"
+             placeholder="e.g. Fintech, Healthcare, Government, Startups">
+    </div>
+
+    <div class="field-group">
+      <label class="field-label" for="q3">
+        Geography, timeline, or constraints <span class="optional">optional</span>
+      </label>
+      <input type="text" id="q3"
+             placeholder="e.g. Remote-first, Ontario, need sponsorship, 6-month timeline">
+    </div>
+
+    <!-- API settings -->
+    <details class="settings-panel" id="settings-details">
+      <summary>⚙ API Settings</summary>
+      <div class="settings-content">
+        <div class="field-group">
+          <label class="field-label" for="provider">Provider preset</label>
+          <select id="provider">
+            <option value="anthropic">Anthropic</option>
+            <option value="openai">OpenAI</option>
+            <option value="groq">Groq</option>
+            <option value="ollama">Ollama (local)</option>
+            <option value="custom">Custom</option>
+          </select>
+        </div>
+
+        <div class="two-col">
+          <div class="field-group">
+            <label class="field-label" for="base-url">Base URL</label>
+            <input type="url" id="base-url" autocomplete="off"
+                   placeholder="https://api.openai.com/v1">
+          </div>
+          <div class="field-group">
+            <label class="field-label" for="model">Model name</label>
+            <input type="text" id="model" autocomplete="off"
+                   placeholder="gpt-4o-mini">
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label" for="api-key">API key</label>
+          <div class="password-row">
+            <input type="password" id="api-key" autocomplete="off"
+                   placeholder="sk-… (enter 'none' for local Ollama without auth)">
+            <button type="button" id="toggle-key" class="btn-icon">Show</button>
+          </div>
+          <p class="field-hint" id="provider-hint"></p>
+        </div>
+      </div>
+    </details>
+
+    <!-- Action buttons -->
+    <div class="action-row">
+      <button id="btn-generate" class="btn-primary">Generate</button>
+      <button id="btn-clear" class="btn-secondary">Clear All</button>
+      <button id="btn-sample" class="btn-ghost">Load sample</button>
+    </div>
+
+    <!-- Status pills -->
+    <div class="status-row" id="status-row" style="display:none">
+      <span class="pill" id="pill-linkedin">LinkedIn</span>
+      <span class="pill" id="pill-cv">CV</span>
+      <span class="pill" id="pill-dev">Dev Plan</span>
+      <span class="pill" id="pill-jobs">Jobs</span>
+    </div>
+  </section>
+
+  <!-- ======================================================= -->
+  <!-- 2. Results                                               -->
+  <!-- ======================================================= -->
+  <section class="panel" id="output-panel" style="display:none">
+    <h2 class="panel-title">2. Results</h2>
+
+    <div class="tab-bar" id="tab-bar">
+      <button class="tab active" data-tab="linkedin">LinkedIn Update</button>
+      <button class="tab" data-tab="cv">CV</button>
+      <button class="tab" data-tab="dev">Dev Plan</button>
+      <button class="tab" data-tab="jobs">Job Targets</button>
+    </div>
+
+    <div class="tab-content">
+      <div class="tab-pane active" id="tab-linkedin"></div>
+      <div class="tab-pane"        id="tab-cv"></div>
+      <div class="tab-pane"        id="tab-dev"></div>
+      <div class="tab-pane"        id="tab-jobs"></div>
+    </div>
+
+    <div class="export-row">
+      <button class="btn-secondary" id="btn-copy-tab">Copy Tab</button>
+      <button class="btn-secondary" id="btn-copy-all">Copy All</button>
+      <span class="export-sep">Download:</span>
+      <button class="btn-secondary" id="btn-dl-md">MD</button>
+      <button class="btn-secondary" id="btn-dl-pdf">PDF</button>
+      <button class="btn-secondary" id="btn-dl-docx">DOCX</button>
+    </div>
+  </section>
+
+  <!-- ======================================================= -->
+  <!-- Job search sources                                       -->
+  <!-- ======================================================= -->
+  <details class="wide-details">
+    <summary>Job Search Sources</summary>
+    <div id="job-sources-grid" class="sources-grid">
+      <p style="color:var(--text-faint);font-size:.88rem">Loading…</p>
+    </div>
+  </details>
+
+  <!-- ======================================================= -->
+  <!-- Methodology                                              -->
+  <!-- ======================================================= -->
+  <details class="wide-details">
+    <summary>How this works</summary>
+    <div class="methodology">
+      <p>Career Positioning Studio uses large language models to analyse your career evidence and generate four tailored documents in parallel.</p>
+      <ul>
+        <li><strong>LinkedIn Update Plan</strong> — new headline options, rewritten About section, experience bullet rewrites, top skills to pin, and a hygiene checklist.</li>
+        <li><strong>Master CV</strong> — ATS-safe, reverse-chronological, with <code>[FILL: …]</code> placeholders for missing data. The model never invents employers, dates, or certifications.</li>
+        <li><strong>Professional Development Plan</strong> — a 6–12 month certification roadmap, hands-on projects, networking milestones, and curated learning resources.</li>
+        <li><strong>10 Target Roles</strong> — with fit scores, gap analysis, and ready-to-paste LinkedIn and Indeed search queries.</li>
+      </ul>
+      <p>Your API key is sent with each request to the LLM provider and is never stored on any server. All generation happens in your browser session.</p>
+      <p>Works with any OpenAI-compatible provider: Anthropic, OpenAI, Groq, Together AI, Mistral, Ollama (local), LM Studio, and more.</p>
+    </div>
+  </details>
+
+</main>
+
+<footer>
+  <p class="footer-note">Career Positioning Studio — local edition. Your data stays on your machine; API calls go directly to your chosen LLM provider.</p>
+</footer>
+
+<!-- pdf.js from CDN — used for PDF text extraction; falls back to built-in extractor -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src="app.js"></script>
+
+</body>
+</html>

@@ -1,0 +1,650 @@
+/* ============================================================
+   Design tokens
+   ============================================================ */
+:root {
+  --bg: #fafaf7;
+  --surface: #ffffff;
+  --surface-hover: #f3efe7;
+  --accent: #c15f3c;
+  --accent-dark: #a34e2f;
+  --border: #e2ddd6;
+  --border-focus: #c15f3c;
+  --text: #1a1a18;
+  --text-muted: #6b6560;
+  --text-faint: #9e9890;
+  --pill-running-bg: #fef3c7;
+  --pill-running-fg: #92400e;
+  --pill-done-bg: #d1fae5;
+  --pill-done-fg: #065f46;
+  --pill-warn-bg: #fef9c3;
+  --pill-warn-fg: #713f12;
+  --pill-fail-bg: #fee2e2;
+  --pill-fail-fg: #991b1b;
+  --radius: 10px;
+  --radius-sm: 6px;
+  --shadow: 0 1px 4px rgba(0,0,0,.07), 0 0 0 1px var(--border);
+  color-scheme: light;
+}
+
+/* ============================================================
+   Reset / base
+   ============================================================ */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { font-size: 16px; }
+
+body {
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  line-height: 1.55;
+  min-height: 100vh;
+}
+
+a { color: var(--accent); }
+a:hover { color: var(--accent-dark); }
+
+/* ============================================================
+   Layout
+   ============================================================ */
+header {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+}
+
+header h1 {
+  font-size: 1.9rem;
+  font-weight: 700;
+  letter-spacing: -.02em;
+  margin-bottom: .4rem;
+}
+
+.tagline {
+  color: var(--text-muted);
+  font-size: .97rem;
+  max-width: 680px;
+}
+
+main {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1.5rem 1.5rem 3rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+/* ============================================================
+   Panels
+   ============================================================ */
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  padding: 1.75rem;
+}
+
+.panel-title {
+  font-size: .72rem;
+  font-weight: 700;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-bottom: 1.25rem;
+}
+
+/* ============================================================
+   Form fields
+   ============================================================ */
+.field-group {
+  margin-bottom: 1.1rem;
+}
+
+.field-label {
+  display: block;
+  font-weight: 600;
+  font-size: .92rem;
+  margin-bottom: .35rem;
+}
+
+.required {
+  color: var(--accent);
+  font-weight: 600;
+  font-size: .82rem;
+}
+
+.optional {
+  color: var(--text-faint);
+  font-weight: 400;
+  font-size: .82rem;
+}
+
+.field-hint {
+  color: var(--text-muted);
+  font-size: .82rem;
+  margin-bottom: .45rem;
+  line-height: 1.4;
+}
+
+input[type="text"],
+input[type="url"],
+input[type="password"],
+select,
+textarea {
+  width: 100%;
+  padding: .55rem .75rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .93rem;
+  font-family: inherit;
+  background: var(--surface);
+  color: var(--text);
+  transition: border-color .15s;
+  outline: none;
+}
+
+input[type="text"]:focus,
+input[type="url"]:focus,
+input[type="password"]:focus,
+select:focus,
+textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px rgba(193,95,60,.13);
+}
+
+textarea {
+  resize: vertical;
+  min-height: 120px;
+}
+
+.url-input { margin-bottom: .5rem; }
+
+/* ============================================================
+   Two-column grid
+   ============================================================ */
+.two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  margin-bottom: 1.1rem;
+}
+
+@media (max-width: 580px) {
+  .two-col { grid-template-columns: 1fr; }
+}
+
+/* ============================================================
+   File upload row
+   ============================================================ */
+.upload-row {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  margin-bottom: .5rem;
+  flex-wrap: wrap;
+}
+
+.file-btn {
+  display: inline-block;
+  padding: .4rem .8rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .85rem;
+  cursor: pointer;
+  background: var(--surface);
+  color: var(--text);
+  white-space: nowrap;
+  transition: background .15s;
+}
+
+.file-btn:hover { background: var(--surface-hover); }
+
+.file-name {
+  font-size: .84rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Password row
+   ============================================================ */
+.password-row {
+  display: flex;
+  gap: .5rem;
+}
+
+.password-row input { flex: 1; }
+
+.btn-icon {
+  padding: .52rem .85rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--surface);
+  font-size: .85rem;
+  cursor: pointer;
+  white-space: nowrap;
+  color: var(--text-muted);
+  transition: background .15s;
+}
+
+.btn-icon:hover { background: var(--surface-hover); }
+
+/* ============================================================
+   Settings panel (collapsible)
+   ============================================================ */
+.settings-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  margin-bottom: 1.1rem;
+}
+
+.settings-panel summary {
+  padding: .65rem .85rem;
+  font-size: .87rem;
+  font-weight: 600;
+  color: var(--text-muted);
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+}
+
+.settings-panel summary::-webkit-details-marker { display: none; }
+.settings-panel summary::before { content: '▶  '; font-size: .7rem; }
+.settings-panel[open] summary::before { content: '▼  '; }
+
+.settings-content {
+  padding: .75rem .85rem 1rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   Provider hint
+   ============================================================ */
+#provider-hint {
+  margin-top: .35rem;
+  font-size: .81rem;
+  color: var(--text-muted);
+}
+
+/* ============================================================
+   Action row
+   ============================================================ */
+.action-row {
+  display: flex;
+  align-items: center;
+  gap: .65rem;
+  flex-wrap: wrap;
+  margin-bottom: .85rem;
+}
+
+.btn-primary {
+  padding: .6rem 1.4rem;
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: .93rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-primary:hover:not(:disabled) { background: var(--accent-dark); }
+.btn-primary:disabled { opacity: .55; cursor: not-allowed; }
+
+.btn-secondary {
+  padding: .55rem 1rem;
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background .15s;
+}
+
+.btn-secondary:hover { background: var(--surface-hover); }
+
+.btn-ghost {
+  padding: .55rem .75rem;
+  background: transparent;
+  color: var(--text-muted);
+  border: none;
+  border-radius: var(--radius-sm);
+  font-size: .88rem;
+  cursor: pointer;
+  transition: color .15s;
+}
+
+.btn-ghost:hover { color: var(--text); background: var(--surface-hover); }
+
+/* ============================================================
+   Status pills
+   ============================================================ */
+.status-row {
+  display: flex;
+  gap: .55rem;
+  flex-wrap: wrap;
+  margin-top: .25rem;
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: .3rem .75rem;
+  border-radius: 20px;
+  font-size: .78rem;
+  font-weight: 600;
+  background: #ececea;
+  color: var(--text-muted);
+  transition: background .2s, color .2s;
+}
+
+.pill.running {
+  background: var(--pill-running-bg);
+  color: var(--pill-running-fg);
+}
+
+.pill.running::before {
+  content: '';
+  width: 9px;
+  height: 9px;
+  border: 2px solid currentColor;
+  border-top-color: transparent;
+  border-radius: 50%;
+  animation: spin .8s linear infinite;
+  flex-shrink: 0;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.pill.done {
+  background: var(--pill-done-bg);
+  color: var(--pill-done-fg);
+}
+
+.pill.warn {
+  background: var(--pill-warn-bg);
+  color: var(--pill-warn-fg);
+}
+
+.pill.fail {
+  background: var(--pill-fail-bg);
+  color: var(--pill-fail-fg);
+}
+
+/* ============================================================
+   Output panel — tabs
+   ============================================================ */
+.tab-bar {
+  display: flex;
+  gap: 0;
+  border-bottom: 2px solid var(--border);
+  margin-bottom: 1.25rem;
+  flex-wrap: wrap;
+}
+
+.tab {
+  padding: .55rem 1.1rem;
+  background: transparent;
+  border: none;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -2px;
+  font-size: .9rem;
+  font-weight: 500;
+  color: var(--text-muted);
+  cursor: pointer;
+  transition: color .15s, border-color .15s;
+  white-space: nowrap;
+}
+
+.tab:hover { color: var(--text); }
+
+.tab.active {
+  color: var(--accent);
+  border-bottom-color: var(--accent);
+  font-weight: 600;
+}
+
+.tab-content { min-height: 300px; }
+
+.tab-pane { display: none; }
+.tab-pane.active { display: block; }
+
+/* ============================================================
+   Rendered Markdown
+   ============================================================ */
+.md-body {
+  font-size: .93rem;
+  line-height: 1.65;
+  color: var(--text);
+}
+
+.md-body h1 { font-size: 1.45rem; font-weight: 700; margin: 1.4rem 0 .6rem; }
+.md-body h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin: 1.25rem 0 .5rem;
+  padding-bottom: .3rem;
+  border-bottom: 1px solid var(--border);
+}
+.md-body h3 { font-size: .98rem; font-weight: 700; margin: 1rem 0 .4rem; }
+.md-body h4, .md-body h5, .md-body h6 { font-size: .93rem; font-weight: 600; margin: .85rem 0 .35rem; }
+
+.md-body p { margin-bottom: .75rem; }
+.md-body ul, .md-body ol { padding-left: 1.4rem; margin-bottom: .75rem; }
+.md-body li { margin-bottom: .25rem; }
+.md-body li input[type="checkbox"] { margin-right: .4rem; }
+
+.md-body strong { font-weight: 700; }
+.md-body em { font-style: italic; }
+.md-body code {
+  font-family: "SFMono-Regular", Consolas, monospace;
+  font-size: .87em;
+  background: #f0ede8;
+  padding: .15em .35em;
+  border-radius: 3px;
+}
+
+.md-body pre {
+  background: #f0ede8;
+  padding: .85rem 1rem;
+  border-radius: var(--radius-sm);
+  overflow-x: auto;
+  margin-bottom: .75rem;
+}
+
+.md-body pre code {
+  background: none;
+  padding: 0;
+  font-size: .85rem;
+}
+
+.md-body hr {
+  border: none;
+  border-top: 1px solid var(--border);
+  margin: 1.25rem 0;
+}
+
+.md-body table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: .87rem;
+  margin-bottom: .9rem;
+  overflow-x: auto;
+  display: block;
+}
+
+.md-body th {
+  background: var(--surface-hover);
+  font-weight: 600;
+  text-align: left;
+  padding: .45rem .7rem;
+  border: 1px solid var(--border);
+}
+
+.md-body td {
+  padding: .4rem .7rem;
+  border: 1px solid var(--border);
+  vertical-align: top;
+}
+
+.md-body a { color: var(--accent); }
+
+/* ============================================================
+   Generating / error states inside tabs
+   ============================================================ */
+.generating {
+  color: var(--text-faint);
+  font-style: italic;
+  padding: 2rem 0;
+  font-size: .9rem;
+}
+
+.error-msg {
+  color: var(--pill-fail-fg);
+  background: var(--pill-fail-bg);
+  border-radius: var(--radius-sm);
+  padding: .85rem 1rem;
+  font-size: .9rem;
+}
+
+/* ============================================================
+   Export row
+   ============================================================ */
+.export-row {
+  display: flex;
+  align-items: center;
+  gap: .55rem;
+  flex-wrap: wrap;
+  margin-top: 1.25rem;
+  padding-top: 1rem;
+  border-top: 1px solid var(--border);
+}
+
+.export-sep {
+  font-size: .83rem;
+  color: var(--text-faint);
+  margin-left: .25rem;
+}
+
+/* ============================================================
+   Wide details panels (job sources, methodology)
+   ============================================================ */
+.wide-details {
+  background: var(--surface);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.wide-details > summary {
+  padding: 1rem 1.5rem;
+  font-weight: 600;
+  font-size: .95rem;
+  cursor: pointer;
+  user-select: none;
+  list-style: none;
+  color: var(--text);
+  transition: background .15s;
+}
+
+.wide-details > summary::-webkit-details-marker { display: none; }
+.wide-details > summary::before { content: '▶  '; font-size: .7rem; color: var(--text-muted); }
+.wide-details[open] > summary::before { content: '▼  '; }
+.wide-details > summary:hover { background: var(--surface-hover); }
+
+.wide-details > *:not(summary) {
+  padding: 1rem 1.5rem 1.5rem;
+  border-top: 1px solid var(--border);
+}
+
+/* ============================================================
+   Job sources grid
+   ============================================================ */
+.sources-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+  gap: 1rem;
+}
+
+.source-card {
+  padding: .85rem 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius-sm);
+  background: var(--bg);
+}
+
+.source-card h4 {
+  font-size: .88rem;
+  font-weight: 700;
+  margin-bottom: .3rem;
+  color: var(--accent);
+}
+
+.source-card .desc {
+  font-size: .79rem;
+  color: var(--text-muted);
+  margin-bottom: .55rem;
+}
+
+.source-card .links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: .3rem;
+}
+
+.source-card .links a {
+  font-size: .79rem;
+  color: var(--accent);
+  text-decoration: none;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: .1rem .4rem;
+  background: var(--surface);
+  transition: background .1s;
+}
+
+.source-card .links a:hover { background: var(--surface-hover); }
+
+/* ============================================================
+   Methodology
+   ============================================================ */
+.methodology {
+  font-size: .9rem;
+  color: var(--text-muted);
+  line-height: 1.65;
+}
+
+.methodology p { margin-bottom: .6rem; }
+.methodology ul { padding-left: 1.3rem; }
+.methodology li { margin-bottom: .35rem; }
+
+/* ============================================================
+   Footer
+   ============================================================ */
+footer {
+  max-width: 860px;
+  margin: 0 auto;
+  padding: 1rem 1.5rem 2rem;
+}
+
+.footer-note {
+  font-size: .79rem;
+  color: var(--text-faint);
+}
+
+/* ============================================================
+   Print styles (for PDF export)
+   ============================================================ */
+@media print {
+  header, .action-row, .status-row, .tab-bar,
+  .export-row, .wide-details, footer, .settings-panel,
+  .upload-row, #inputs-panel { display: none !important; }
+
+  .panel { box-shadow: none; border: none; padding: 0; }
+  .tab-pane { display: block !important; }
+}

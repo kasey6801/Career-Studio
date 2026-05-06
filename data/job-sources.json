@@ -1,0 +1,103 @@
+[
+  {
+    "title": "General — Global",
+    "desc": "Broad job boards covering most industries and roles worldwide.",
+    "links": [
+      { "name": "LinkedIn Jobs", "url": "https://www.linkedin.com/jobs/" },
+      { "name": "Indeed", "url": "https://www.indeed.com" },
+      { "name": "Glassdoor", "url": "https://www.glassdoor.com/Job/index.htm" },
+      { "name": "ZipRecruiter", "url": "https://www.ziprecruiter.com" },
+      { "name": "Monster", "url": "https://www.monster.com" },
+      { "name": "SimplyHired", "url": "https://www.simplyhired.com" }
+    ]
+  },
+  {
+    "title": "Cybersecurity-focused",
+    "desc": "Specialised boards for security, compliance, and cleared positions.",
+    "links": [
+      { "name": "CyberSecJobs", "url": "https://www.cybersecjobs.com" },
+      { "name": "CyberSeek", "url": "https://www.cyberseek.org" },
+      { "name": "InfoSec Jobs", "url": "https://www.infosec-jobs.com" },
+      { "name": "ClearanceJobs", "url": "https://www.clearancejobs.com" },
+      { "name": "Dice", "url": "https://www.dice.com" },
+      { "name": "(ISC)² Job Board", "url": "https://careers.isc2.org" }
+    ]
+  },
+  {
+    "title": "Tech & Startups",
+    "desc": "Startup and tech-company focused boards with equity-aware listings.",
+    "links": [
+      { "name": "Wellfound (AngelList)", "url": "https://wellfound.com/jobs" },
+      { "name": "Hacker News — Who's Hiring", "url": "https://news.ycombinator.com/jobs" },
+      { "name": "Built In", "url": "https://builtin.com/jobs" },
+      { "name": "Welcome to the Jungle", "url": "https://www.welcometothejungle.com/en/jobs" },
+      { "name": "Hired", "url": "https://hired.com" }
+    ]
+  },
+  {
+    "title": "Remote-first",
+    "desc": "Boards that curate fully-remote and location-flexible roles.",
+    "links": [
+      { "name": "We Work Remotely", "url": "https://weworkremotely.com" },
+      { "name": "Remote.co", "url": "https://remote.co/remote-jobs/" },
+      { "name": "RemoteOK", "url": "https://remoteok.com" },
+      { "name": "JustRemote", "url": "https://justremote.co" },
+      { "name": "NoDesk", "url": "https://nodesk.co/remote-jobs/" }
+    ]
+  },
+  {
+    "title": "Canada-focused",
+    "desc": "Job boards and networks serving Canadian employers and job seekers.",
+    "links": [
+      { "name": "Job Bank Canada", "url": "https://www.jobbank.gc.ca" },
+      { "name": "Canadian Cybersecurity Network", "url": "https://www.canadiancybersecuritynetwork.ca" },
+      { "name": "Eluta", "url": "https://www.eluta.ca" },
+      { "name": "Indeed Canada", "url": "https://ca.indeed.com" },
+      { "name": "CyberAlberta", "url": "https://cyberalberta.ca" }
+    ]
+  },
+  {
+    "title": "Ontario-focused",
+    "desc": "Tech ecosystem boards and hubs centred on Ontario and Toronto.",
+    "links": [
+      { "name": "WorkInTech (MaRS)", "url": "https://workintech.ca" },
+      { "name": "TechTO", "url": "https://www.techto.org/jobs" },
+      { "name": "Communitech Job Board", "url": "https://www.communitech.ca/jobs/" },
+      { "name": "Invest Ottawa Job Board", "url": "https://www.investottawa.ca/talent/" },
+      { "name": "Ontario Public Service (GoJobs)", "url": "https://www.ontario.ca/jobs" },
+      { "name": "Cybersecure Catalyst", "url": "https://www.cybersecurecatalyst.ca" }
+    ]
+  },
+  {
+    "title": "Government & Cleared",
+    "desc": "Federal and international public-sector and intelligence-community boards.",
+    "links": [
+      { "name": "GC Jobs (Canada)", "url": "https://emploisfp-psjobs.cfp-psc.gc.ca" },
+      { "name": "CCCS Careers", "url": "https://www.cyber.gc.ca/en/careers" },
+      { "name": "USAJOBS", "url": "https://www.usajobs.gov" },
+      { "name": "Intelligence Careers", "url": "https://www.intelligencecareers.gov" },
+      { "name": "UN Careers", "url": "https://careers.un.org" }
+    ]
+  },
+  {
+    "title": "Industry-specific (Energy / OT)",
+    "desc": "Boards for operational technology, oil & gas, and energy-sector roles.",
+    "links": [
+      { "name": "Rigzone", "url": "https://www.rigzone.com/oil/jobs/" },
+      { "name": "Oil & Gas Job Search", "url": "https://www.oilandgasjobsearch.com" },
+      { "name": "Energy Jobline", "url": "https://www.energyjobline.com" },
+      { "name": "ISA Career Resources", "url": "https://www.isa.org/careers" }
+    ]
+  },
+  {
+    "title": "Recruiters & Communities",
+    "desc": "Professional communities and recruiter networks for targeted outreach.",
+    "links": [
+      { "name": "LinkedIn Groups", "url": "https://www.linkedin.com/groups/" },
+      { "name": "Meetup (Tech groups)", "url": "https://www.meetup.com" },
+      { "name": "BSides Events", "url": "https://www.securitybsides.com" },
+      { "name": "InfoSec Exchange (Mastodon)", "url": "https://infosec.exchange" },
+      { "name": "r/cybersecurity", "url": "https://www.reddit.com/r/cybersecurity/" }
+    ]
+  }
+]

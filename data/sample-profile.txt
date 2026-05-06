@@ -1,0 +1,52 @@
+Alex Morgan
+Senior Software Engineer
+Toronto, Ontario, Canada
+
+ABOUT
+Experienced software engineer with 8 years of experience building scalable backend systems and cloud infrastructure. Currently working at FinanceFlow Inc., where I lead the platform engineering team responsible for a payment processing system handling $2B in annual transaction volume. Passionate about cloud architecture, security, and developer experience. Looking to transition into a Solutions Architect or Cloud Architect role where I can apply my technical depth at a strategic level.
+
+EXPERIENCE
+
+Senior Software Engineer — FinanceFlow Inc. | Toronto, ON | March 2020 – Present
+- Lead a team of 4 engineers building the core payment processing platform (Python, FastAPI, PostgreSQL, AWS)
+- Migrated monolithic billing system to microservices, reducing deployment time from 3 hours to 12 minutes
+- Implemented real-time fraud detection pipeline using AWS Kinesis and SageMaker; reduced chargebacks by 34%
+- Designed multi-region active-active architecture achieving 99.98% uptime SLA
+- Mentored 3 junior engineers; 2 have since been promoted to mid-level
+- Technology stack: Python, FastAPI, PostgreSQL, Redis, AWS (ECS, RDS, Kinesis, SageMaker, CloudFormation), Terraform, Docker, Kubernetes
+
+Software Engineer — DataSoft Solutions | Toronto, ON | June 2017 – February 2020
+- Built RESTful APIs serving 500K daily active users for a SaaS analytics platform
+- Reduced API p95 latency from 820ms to 140ms through query optimization and caching strategy
+- Introduced automated integration test suite (pytest); increased code coverage from 31% to 87%
+- Led migration from on-premise infrastructure to AWS; reduced hosting costs by 42%
+- Technology stack: Python, Django, MySQL, Celery, AWS EC2/S3/RDS, Jenkins
+
+Junior Developer — Clearview Digital Agency | Ottawa, ON | September 2016 – May 2017
+- Developed client-facing web applications using React and Node.js
+- Maintained CI/CD pipelines using Jenkins and Docker
+
+EDUCATION
+
+Bachelor of Science, Computer Science
+University of Toronto | Toronto, ON | Graduated May 2016
+- GPA: 3.7/4.0
+- Relevant coursework: Distributed Systems, Database Systems, Algorithms, Computer Networks
+
+CERTIFICATIONS
+- AWS Certified Developer – Associate | Amazon Web Services | 2021
+- HashiCorp Certified: Terraform Associate | HashiCorp | 2022
+
+SKILLS
+Languages: Python, JavaScript, TypeScript, SQL, Bash
+Frameworks: FastAPI, Django, React, Node.js
+Cloud: AWS (ECS, RDS, Kinesis, SageMaker, Lambda, CloudFormation, IAM), GCP (basic familiarity)
+Infrastructure: Terraform, Docker, Kubernetes, Helm
+Databases: PostgreSQL, MySQL, Redis, DynamoDB
+Security: IAM policy design, secrets management (AWS Secrets Manager, Vault), SOC 2 controls awareness
+Other: REST API design, microservices architecture, system design, agile/scrum
+
+CAREER GOALS
+Target titles: Solutions Architect, Cloud Architect, Principal Engineer
+Target industries: Fintech, Enterprise SaaS, Healthcare tech, Government/Public sector
+Geography / constraints: Open to hybrid in Toronto or fully remote across Canada; not seeking relocation; targeting a move within 6–9 months
