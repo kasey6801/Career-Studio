@@ -54,7 +54,6 @@ The script installs dependencies, then opens `http://127.0.0.1:8000` in your bro
 |----------|----------|-----------------|
 | Anthropic | `https://api.anthropic.com/v1` | `claude-haiku-4-5-20251001` · `claude-sonnet-4-6` |
 | OpenAI | `https://api.openai.com/v1` | `gpt-4o-mini` · `gpt-4o` |
-| Groq | `https://api.groq.com/openai/v1` | `llama-3.1-8b-instant` · `llama-3.3-70b-versatile` |
 | Ollama (local) | `http://localhost:11434/v1` | `llama3.2` (or any pulled model) |
 | Any OpenAI-compatible endpoint | custom | — |
 

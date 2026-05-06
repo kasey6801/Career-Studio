@@ -29,11 +29,6 @@ const PROVIDERS = {
     modelPlaceholder: 'gpt-4o-mini',
     hint: 'Get a key at platform.openai.com. Suggested models: gpt-4o-mini (fast) or gpt-4o (quality).',
   },
-  groq: {
-    baseUrl: 'https://api.groq.com/openai/v1',
-    modelPlaceholder: 'llama-3.1-8b-instant',
-    hint: 'Get a free key at console.groq.com. Suggested: llama-3.1-8b-instant or llama-3.3-70b-versatile.',
-  },
   ollama: {
     baseUrl: 'http://localhost:11434/v1',
     modelPlaceholder: 'llama3.2',
