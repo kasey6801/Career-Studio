@@ -223,7 +223,7 @@ def build_context(data: "GenerateRequest") -> str:
 
 
 # ---------------------------------------------------------------------------
-# Request model — strict validation with length caps
+# Request models — strict validation with length caps
 # ---------------------------------------------------------------------------
 
 class GenerateRequest(BaseModel):
@@ -251,6 +251,76 @@ class GenerateRequest(BaseModel):
         if not v.strip():
             raise ValueError("LinkedIn profile content is required")
         return v
+
+
+class RefineMessage(BaseModel):
+    role: str = Field(..., pattern="^(user|assistant)$")
+    content: str = Field(..., max_length=8_192)
+
+
+class RefineRequest(BaseModel):
+    api_key: str = Field(..., min_length=1, max_length=512)
+    base_url: str = Field(..., min_length=1, max_length=256)
+    model: str = Field(..., min_length=1, max_length=128)
+    question: str = Field(..., min_length=1, max_length=4_096)
+    outputs: dict[str, str] = Field(default_factory=dict)
+    website: str = Field(default="", max_length=512)
+    github: str = Field(default="", max_length=512)
+    q1: str = Field(default="", max_length=2_048)
+    q2: str = Field(default="", max_length=2_048)
+    q3: str = Field(default="", max_length=2_048)
+    history: list[RefineMessage] = Field(default_factory=list)
+
+    @field_validator("base_url")
+    @classmethod
+    def validate_base_url(cls, v: str) -> str:
+        if not (v.startswith("http://") or v.startswith("https://")):
+            raise ValueError("base_url must start with http:// or https://")
+        return v.rstrip("/")
+
+    @field_validator("history")
+    @classmethod
+    def cap_history(cls, v: list) -> list:
+        return v[-20:]  # keep last 10 exchanges max
+
+
+_REFINE_SECTION_TITLES = {
+    "linkedin": "LinkedIn Update Plan",
+    "cv": "CV",
+    "dev": "Development Plan",
+    "jobs": "Job Targets",
+}
+_SECTION_CAP = 10_000   # chars per output section in the system prompt
+_SYSTEM_CAP  = 50_000   # hard cap on the entire system message
+
+
+def build_refine_system(data: RefineRequest) -> str:
+    parts = [
+        "You are a career advisor. The user generated the career package shown below and wants to ask questions or request changes.",
+        "When asked to change a section, output the updated section in full Markdown.",
+        "Be concise and direct. Do not repeat the question back to the user.\n",
+        "=== Generated Career Package ===\n",
+    ]
+    for key, title in _REFINE_SECTION_TITLES.items():
+        text = data.outputs.get(key, "").strip()
+        if text:
+            if len(text) > _SECTION_CAP:
+                text = text[:_SECTION_CAP] + "\n…[truncated]"
+            parts.append(f"--- {title} ---\n{text}\n")
+
+    ctx: list[str] = []
+    if data.q1:      ctx.append(f"Target titles: {data.q1}")
+    if data.q2:      ctx.append(f"Target industries: {data.q2}")
+    if data.q3:      ctx.append(f"Geography/constraints: {data.q3}")
+    if data.website: ctx.append(f"Website: {data.website}")
+    if data.github:  ctx.append(f"GitHub: {data.github}")
+    if ctx:
+        parts.append("\n=== Career Context ===\n" + "\n".join(ctx))
+
+    system = "\n".join(parts)
+    if len(system) > _SYSTEM_CAP:
+        system = system[:_SYSTEM_CAP] + "\n…[context truncated to fit model limits]"
+    return system
 
 
 # ---------------------------------------------------------------------------
@@ -326,6 +396,45 @@ async def generate(request: GenerateRequest):
             "Cache-Control": "no-cache",
             "X-Accel-Buffering": "no",
         },
+    )
+
+
+@app.post("/api/refine")
+async def refine(request: RefineRequest):
+    async def _stream() -> AsyncGenerator[str, None]:
+        extra_headers: dict = {}
+        if "api.anthropic.com" in request.base_url:
+            extra_headers["anthropic-version"] = "2023-06-01"
+
+        client = AsyncOpenAI(
+            api_key=request.api_key,
+            base_url=request.base_url,
+            default_headers=extra_headers,
+        )
+
+        messages: list[dict] = [{"role": "system", "content": build_refine_system(request)}]
+        for msg in request.history:
+            messages.append({"role": msg.role, "content": msg.content})
+        messages.append({"role": "user", "content": request.question})
+
+        try:
+            response = await client.chat.completions.create(
+                model=request.model,
+                messages=messages,
+                stream=True,
+                timeout=120.0,
+            )
+            async for chunk in response:
+                if chunk.choices and chunk.choices[0].delta and chunk.choices[0].delta.content:
+                    yield f"data: {json.dumps({'chunk': chunk.choices[0].delta.content})}\n\n"
+            yield f"data: {json.dumps({'done': True})}\n\n"
+        except Exception as exc:
+            yield f"data: {json.dumps({'error': str(exc)})}\n\n"
+
+    return StreamingResponse(
+        _stream(),
+        media_type="text/event-stream",
+        headers={"Cache-Control": "no-cache", "X-Accel-Buffering": "no"},
     )
 
 

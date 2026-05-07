@@ -722,6 +722,11 @@ function handleSSEData(data) {
     SECTIONS.forEach(s => {
       if (!OUTPUT_CACHE[s]) setPillState(s, 'fail');
     });
+    // Show refine panel and reset its chat history for this new run
+    document.getElementById('refine-panel').style.display = 'block';
+    document.getElementById('refine-panel').scrollIntoView({ behavior: 'smooth', block: 'start' });
+    chatHistory.length = 0;
+    document.getElementById('chat-history').innerHTML = '';
     return;
   }
 
@@ -742,6 +747,147 @@ function handleSSEData(data) {
     setPillState(section, 'fail');
     const pane = document.getElementById(`tab-${section}`);
     if (pane) pane.innerHTML = `<div class="error-msg">Error: ${escapeHtml(String(data.error).slice(0, 300))}</div>`;
+  }
+}
+
+// ---------------------------------------------------------------------------
+// Refine chat
+// ---------------------------------------------------------------------------
+
+const chatHistory = [];   // [{role, content}] — full conversation so far
+let isRefining = false;
+
+function appendChatBubble(role, content, streaming = false) {
+  const history = document.getElementById('chat-history');
+  const wrap = document.createElement('div');
+  wrap.className = `chat-msg ${role}`;
+
+  const bubble = document.createElement('div');
+  bubble.className = 'chat-bubble';
+
+  if (role === 'user') {
+    bubble.textContent = content;
+  } else if (streaming) {
+    bubble.innerHTML = '<span class="streaming-cursor"></span>';
+  } else {
+    bubble.innerHTML = renderMarkdown(content);
+  }
+
+  wrap.appendChild(bubble);
+  history.appendChild(wrap);
+  history.scrollTop = history.scrollHeight;
+  return bubble;
+}
+
+function updateAssistantBubble(bubble, content, done = false) {
+  if (done) {
+    bubble.innerHTML = renderMarkdown(content);
+  } else {
+    bubble.innerHTML = escapeHtml(content) + '<span class="streaming-cursor"></span>';
+  }
+  const history = document.getElementById('chat-history');
+  history.scrollTop = history.scrollHeight;
+}
+
+async function sendRefine() {
+  if (isRefining) return;
+
+  const input = document.getElementById('refine-input');
+  const question = input.value.trim();
+  if (!question) return;
+
+  const apiKey  = document.getElementById('api-key').value.trim();
+  const baseUrl = document.getElementById('base-url').value.trim();
+  const model   = document.getElementById('model').value.trim();
+
+  if (!apiKey || !baseUrl || !model) {
+    openSettings();
+    alert('Please configure API settings first.');
+    return;
+  }
+
+  isRefining = true;
+  document.getElementById('btn-refine-send').disabled = true;
+  input.value = '';
+  input.style.height = '';
+
+  // Snapshot history before adding new messages
+  const historySnapshot = chatHistory.slice(-20);
+
+  appendChatBubble('user', question);
+  chatHistory.push({ role: 'user', content: question });
+
+  const assistantBubble = appendChatBubble('assistant', '', true);
+  let accumulated = '';
+
+  const payload = {
+    api_key:  apiKey,
+    base_url: baseUrl,
+    model:    model,
+    question: question,
+    outputs:  { ...OUTPUT_CACHE },
+    website:  document.getElementById('website').value.trim(),
+    github:   document.getElementById('github').value.trim(),
+    q1:       document.getElementById('q1').value.trim(),
+    q2:       document.getElementById('q2').value.trim(),
+    q3:       document.getElementById('q3').value.trim(),
+    history:  historySnapshot,
+  };
+
+  try {
+    const response = await fetch('/api/refine', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload),
+    });
+
+    if (!response.ok) {
+      let msg = `HTTP ${response.status}`;
+      try { const j = await response.json(); msg = j.detail || msg; } catch (_) {}
+      throw new Error(msg);
+    }
+
+    const reader  = response.body.getReader();
+    const decoder = new TextDecoder();
+    let buffer = '';
+
+    while (true) {
+      const { done, value } = await reader.read();
+      if (done) break;
+      buffer += decoder.decode(value, { stream: true });
+      const lines = buffer.split('\n');
+      buffer = lines.pop();
+      for (const line of lines) {
+        if (!line.startsWith('data: ')) continue;
+        try {
+          const data = JSON.parse(line.slice(6));
+          if (data.chunk) {
+            accumulated += data.chunk;
+            updateAssistantBubble(assistantBubble, accumulated, false);
+          }
+          if (data.done) {
+            updateAssistantBubble(assistantBubble, accumulated, true);
+            chatHistory.push({ role: 'assistant', content: accumulated });
+          }
+          if (data.error) {
+            const msg = `**Error from model:** ${data.error}`;
+            updateAssistantBubble(assistantBubble, msg, true);
+            chatHistory.pop(); // remove the failed user turn
+          }
+        } catch (_) {}
+      }
+    }
+  } catch (err) {
+    updateAssistantBubble(
+      assistantBubble,
+      `**Couldn't reach the model.** ${escapeHtml(err.message)}`,
+      true
+    );
+    chatHistory.pop();
+  } finally {
+    isRefining = false;
+    document.getElementById('btn-refine-send').disabled = false;
+    input.focus();
   }
 }
 
@@ -899,10 +1045,13 @@ function clearAll() {
   const cvFile = document.getElementById('cv-file');
   if (cvFile) cvFile.value = '';
 
-  // Reset output
+  // Reset output and refine
   SECTIONS.forEach(s => { OUTPUT_CACHE[s] = ''; });
   document.getElementById('output-panel').style.display = 'none';
   document.getElementById('status-row').style.display = 'none';
+  document.getElementById('refine-panel').style.display = 'none';
+  chatHistory.length = 0;
+  document.getElementById('chat-history').innerHTML = '';
   resetPills();
 
   // Clear localStorage
@@ -1049,6 +1198,15 @@ function init() {
   document.getElementById('btn-dl-md')?.addEventListener('click', downloadMarkdown);
   document.getElementById('btn-dl-pdf')?.addEventListener('click', downloadPdf);
   document.getElementById('btn-dl-docx')?.addEventListener('click', downloadDocx);
+
+  // Refine
+  document.getElementById('btn-refine-send')?.addEventListener('click', sendRefine);
+  document.getElementById('refine-input')?.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendRefine();
+    }
+  });
 
   // Load job sources in the background
   loadJobSources();
