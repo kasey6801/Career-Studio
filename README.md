@@ -1,6 +1,6 @@
 # Career Studio
 
-A local web app that turns your LinkedIn profile into a four-part career package — generated in parallel by any OpenAI-compatible LLM and streamed live to your browser.
+**v0.42.1.1** — A local web app that turns your LinkedIn profile into a four-part career package — generated in parallel by any OpenAI-compatible LLM and streamed live to your browser.
 
 ---
 
@@ -117,6 +117,18 @@ career_studio/
     ├── job-sources.json    # 9 curated job-search source categories
     └── sample-profile.txt  # Sample LinkedIn profile for the "Load sample" button
 ```
+
+---
+
+## Changelog
+
+### v0.42.1.1
+- Added **Refine** section — follow-up chat against the generated outputs; supports multi-turn conversation, streaming responses, and full Markdown rendering
+- Fixed start scripts (`start.sh` / `start.bat`) not finding `requirements.txt` when launched via double-click or a full path
+- Prompt size guarded: follow-up context capped at 10 KB per section / 50 KB total to stay within model limits
+
+### v0.42
+- Initial public release
 
 ---
 

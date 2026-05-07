@@ -14,7 +14,9 @@ BASE_DIR = Path(__file__).parent
 DATA_DIR = BASE_DIR / "data"
 PUBLIC_DIR = BASE_DIR / "public"
 
-app = FastAPI(title="Career Positioning Studio")
+APP_VERSION = "0.42.1.1"
+
+app = FastAPI(title="Career Positioning Studio", version=APP_VERSION)
 
 # ---------------------------------------------------------------------------
 # Prompts
