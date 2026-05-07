@@ -1,6 +1,9 @@
 #!/usr/bin/env bash
 set -e
 
+# Always run from the directory containing this script
+cd "$(dirname "$0")"
+
 command -v python3 >/dev/null 2>&1 || {
     echo "Python 3 is required. Install it from https://www.python.org/downloads/"
     exit 1
